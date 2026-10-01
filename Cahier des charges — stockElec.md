@@ -22,7 +22,7 @@ Déjà en place, fourni par le client : le dépôt Git, le projet Supabase et le
 
 - Développe uniquement ce qui est décrit ici, aucune fonctionnalité en plus.
 - Quand un point n'est pas précisé, choisis l'option la plus simple qui respecte la spec et note ce choix dans `DECISIONS.md`.
-- Avant toute fonctionnalité, pose le socle : schéma Supabase (migrations SQL) et design system (tokens de couleurs, typographie, espacements, composants de base).
+- Avant toute fonctionnalité, pose le socle : schéma de base de données (schéma et migrations Prisma) et design system (tokens de couleurs, typographie, espacements, composants de base).
 - Suis l'ordre de la section 8. À la fin de chaque étape, l'app doit compiler, se lancer et être testable.
 - TypeScript strict, aucune clé secrète côté client, `.env.example` tenu à jour.
 - Si une étape exige une action manuelle (réglage dans le dashboard Supabase ou Vercel), arrête-toi et liste précisément ce qu'il faut faire ou fournir.
@@ -60,6 +60,7 @@ Hors périmètre : multi-utilisateurs, gestion commerciale (factures, ventes), p
 Imposé :
 
 - **Supabase** pour la base de données (PostgreSQL), l'authentification et le stockage des photos (Supabase Storage).
+- **Prisma** pour le schéma de la base et les migrations (`prisma/schema.prisma`, `prisma migrate`). Les politiques RLS, grants et objets propres à Supabase sont ajoutés en SQL dans les migrations Prisma. L'application lit et écrit toujours via le client Supabase (supabase-js) protégé par la RLS.
 - **Row Level Security** activée sur toutes les tables, même en mono-utilisateur.
 - **PWA** : manifest, service worker, installable sur iOS et Android, accès caméra.
 - React/Next.js
@@ -178,7 +179,7 @@ Proposition de départ, à affiner par l'agent. Toutes les tables portent un `us
 | `stock_movements` | Historique | id, item\_id, delta, type (ajout, retrait, déplacement), date |
 | `shopping_list` | Liste de courses | id, item\_id, quantité, acheté |
 
-Les paramètres techniques sont stockés en JSONB et indexés pour permettre la recherche paramétrique.
+Le modèle est décrit dans `prisma/schema.prisma`. Les paramètres techniques sont stockés en JSONB et indexés pour permettre la recherche paramétrique.
 
 ## 6. UI / UX
 
@@ -227,7 +228,7 @@ L'agent peut proposer des déclinaisons (nuances, thème sombre) tant que les co
 
 1. **Socle** : Next.js + TypeScript dans le dépôt existant, PWA (manifest, service worker, installable), branchement au projet Supabase existant, authentification, configuration compatible Vercel (le déploiement se fera au push du client).
 2. **Design system et navigation** : tokens de la palette, composants de base, layout mobile (barre basse, bouton d'ajout flottant) et desktop.
-3. **Données** : migrations SQL des tables de la section 5, politiques RLS, buckets Storage.
+3. **Données** : schéma Prisma et migrations des tables de la section 5, politiques RLS (SQL dans les migrations), buckets Storage.
 4. **Emplacements** : arborescence CRUD, QR par emplacement, planche PDF d'étiquettes, scan d'un QR.
 5. **Articles** : CRUD, paramètres par catégorie, quantité +1 / −1, photos, liens fournisseurs, anti-doublon.
 6. **Ajout rapide** : scan code-barres / QR / DataMatrix, saisie manuelle avec autocomplétion, photo enregistrée sur l'article, Edge Function IA en stub désactivée.
@@ -240,7 +241,7 @@ L'agent peut proposer des déclinaisons (nuances, thème sombre) tant que les co
 ### Livrables
 
 - Code source complet dans le dépôt local existant, sans commit ni push.
-- Migrations SQL, politiques RLS et Edge Functions, appliquées au projet Supabase existant.
+- Schéma et migrations Prisma (incluant les politiques RLS), Edge Functions, appliqués au projet Supabase existant.
 - PWA prête à être déployée par le projet Vercel existant au push du client, et installable.
 - README.md : installation locale, variables d'environnement, coût estimé des services externes.
 - `DECISIONS.md` : choix pris par l'agent là où la spec était muette.

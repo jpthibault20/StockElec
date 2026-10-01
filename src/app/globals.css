@@ -1,20 +1,140 @@
 @import "tailwindcss";
 
-/* Minimal base for step 1. The full design system (tokens, components) comes in step 2. */
+/*
+ * stockElec design system — tokens.
+ *
+ * Imposed palette: Sable #AF9164, Crème #F7F3E3, Gris acier #B3B6B7,
+ * Rouille #6F1A07, Brun nuit #2B2118. Derived shades exist only to reach
+ * WCAG AA contrast (ratios noted next to each text token, measured on --bg).
+ *
+ * Light theme only (owner's choice). Components use semantic utilities only
+ * (bg-surface, text-muted, bg-primary-solid…), never raw hex values.
+ */
+
 :root {
-  --color-bg: #f7f3e3;
-  --color-fg: #2b2118;
+  /* Native controls (date, color, scrollbars) stay light too. */
+  color-scheme: light;
+
+  /* Raw palette */
+  --sand: #af9164;
+  --cream: #f7f3e3;
+  --steel: #b3b6b7;
+  --rust: #6f1a07;
+  --night: #2b2118;
+
+  /* The page is a deeper cream so white-ish cards stand out; structural bars
+     (header, bottom bar, sidebar) are Brun nuit. */
+  --bg: #efe7d3; /* cream, deepened */
+  --surface: #fffcf5; /* cards: 1.2:1 on bg + border + shadow */
+  --surface-muted: #ede4cf; /* tracks and pills inside cards */
+  --fg: var(--night); /* 12.8:1 on bg */
+  --muted: #5e6263; /* steel, darkened: 5.0:1 on bg, 6.0:1 on cards */
+  --border: #d6c9ac; /* card outlines and dividers */
+  --border-strong: #808384; /* input outlines: 3.7:1 on cards (non-text) */
+  --primary: var(--rust); /* text, icons, focus */
+  --primary-solid: var(--rust); /* filled buttons */
+  --on-primary: var(--cream); /* 10.3:1 */
+  --accent: var(--sand);
+  --on-accent: var(--night); /* 5.3:1 */
+  --accent-fg: #6b5636; /* sand as text: 5.1:1 on accent-soft */
+  --accent-soft: #e8dcc2; /* sand tint: chips, icon tiles */
+  --alert: var(--rust); /* low stock: 8.8:1 on alert-soft */
+  --alert-soft: #f5dcd2;
+  --focus: var(--rust);
+  --chrome: var(--night); /* header, bottom bar, sidebar */
+  --chrome-fg: var(--cream); /* 14.2:1 */
+  --chrome-muted: var(--steel); /* 7.7:1 */
+  --chrome-active: var(--sand); /* 5.3:1 */
+  --chrome-raised: #3d2f23;
+  --card-shadow: 0 1px 2px rgb(43 33 24 / 0.08), 0 6px 16px -6px rgb(43 33 24 / 0.12);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #2b2118;
-    --color-fg: #f7f3e3;
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-primary: var(--primary);
+  --color-primary-solid: var(--primary-solid);
+  --color-on-primary: var(--on-primary);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-alert: var(--alert);
+  --color-alert-soft: var(--alert-soft);
+  --color-focus: var(--focus);
+  --color-chrome: var(--chrome);
+  --color-chrome-fg: var(--chrome-fg);
+  --color-chrome-muted: var(--chrome-muted);
+  --color-chrome-active: var(--chrome-active);
+  --color-chrome-raised: var(--chrome-raised);
+  --shadow-card: var(--card-shadow);
+}
+
+@theme {
+  /* Typography: system stack (no web font to download, works offline). */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+
+  /* Minimum touch target (spec: 44 px). Use as min-h-touch / size-touch. */
+  --spacing-touch: 2.75rem;
+
+  /* Radii */
+  --radius-control: 0.625rem;
+  --radius-card: 1rem;
+
+  /* Motion: short, never blocking (spec: 150–300 ms). */
+  --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-enter: enter 200ms var(--ease-out-soft);
+  --animate-sheet: sheet 250ms var(--ease-out-soft);
+
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  @keyframes sheet {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
   }
 }
 
-body {
-  background: var(--color-bg);
-  color: var(--color-fg);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  dialog::backdrop {
+    background: rgb(43 33 24 / 0.5);
+  }
+}
+
+/* Respect the system "reduce motion" setting everywhere. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

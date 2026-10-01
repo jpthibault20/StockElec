@@ -8,23 +8,45 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "db:push": "supabase db push"
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:status": "prisma migrate status",
+    "db:types": "supabase gen types typescript --project-id ldygznwpkgskbognzrbc --schema public > src/lib/supabase/database.types.ts",
+    "postinstall": "node scripts/copy-zxing-wasm.mjs",
+    "functions:deploy": "supabase functions deploy identify-component --project-ref ldygznwpkgskbognzrbc --use-api"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.2",
+    "@tanstack/query-async-storage-persister": "^5.104.0",
+    "@tanstack/react-query": "^5.104.0",
+    "@tanstack/react-query-persist-client": "^5.104.0",
+    "barcode-detector": "^3.2.2",
+    "idb-keyval": "^6.3.0",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.49.0",
     "next": "16.3.8",
+    "papaparse": "^5.7.0",
+    "qrcode": "^1.5.4",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@next/env": "^16.3.8",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/papaparse": "^5.5.2",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.8",
+    "prisma": "^7.10.0",
     "supabase": "^2.119.0",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "deepmerge-ts": "^8.0.2",
+    "mysql2": "^3.24.5"
   }
 }

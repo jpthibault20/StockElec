@@ -3,6 +3,7 @@
 import { useEffect, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
+import { AppShell } from "@/components/layout/app-shell";
 
 // Client-side guard for every authenticated screen. Data access is protected
 // by RLS in Supabase; this guard only handles navigation.
@@ -15,5 +16,5 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   }, [auth.status, router]);
 
   if (auth.status !== "signed-in") return null;
-  return <>{children}</>;
+  return <AppShell>{children}</AppShell>;
 }

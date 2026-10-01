@@ -5,10 +5,27 @@
 // - Cross-origin requests (Supabase API, storage) are never intercepted here;
 //   offline data is handled by the app's local cache.
 
-const VERSION = "v1";
+const VERSION = "v7";
 const STATIC_CACHE = `stockelec-static-${VERSION}`;
 const PAGES_CACHE = `stockelec-pages-${VERSION}`;
-const PRECACHE_URLS = ["/", "/login", "/manifest.webmanifest", "/pwa-icon/192", "/pwa-icon/512"];
+const PRECACHE_URLS = [
+  "/",
+  "/login",
+  "/items",
+  "/items/edit",
+  "/locations",
+  "/locations/labels",
+  "/shopping",
+  "/more",
+  "/search",
+  "/add",
+  "/scan",
+  "/history",
+  "/import",
+  "/manifest.webmanifest",
+  "/pwa-icon/192",
+  "/pwa-icon/512",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

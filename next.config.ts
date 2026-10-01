@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Pin the workspace root: a stray lockfile in a parent folder would
+  // otherwise be picked up as the root.
+  turbopack: {
+    root: __dirname,
+  },
   async headers() {
     return [
       {

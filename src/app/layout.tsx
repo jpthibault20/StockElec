@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { AuthProvider } from "@/components/auth-provider";
+import { QueryProvider } from "@/components/query-provider";
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import "./globals.css";
 
@@ -7,15 +8,14 @@ export const metadata: Metadata = {
   title: "stockElec",
   description: "Stock électronique et impression 3D",
   applicationName: "stockElec",
-  appleWebApp: { capable: true, title: "stockElec", statusBarStyle: "default" },
+  appleWebApp: { capable: true, title: "stockElec", statusBarStyle: "black" },
   formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F7F3E3" },
-    { media: "(prefers-color-scheme: dark)", color: "#2B2118" },
-  ],
+  // Matches the Brun nuit header bar.
+  themeColor: "#2B2118",
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -25,7 +25,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="fr">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </AuthProvider>
         <ServiceWorkerRegister />
       </body>
     </html>

@@ -14,8 +14,16 @@ export const env = {
   get supabaseUrl(): string {
     return required("NEXT_PUBLIC_SUPABASE_URL", process.env.NEXT_PUBLIC_SUPABASE_URL);
   },
-  get supabaseAnonKey(): string {
-    return required("NEXT_PUBLIC_SUPABASE_ANON_KEY", process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  get supabasePublishableKey(): string {
+    return required(
+      "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    );
+  },
+  // Public URL encoded in printed QR labels. Optional: falls back to the
+  // current origin, but labels printed from localhost would not open on a phone.
+  get appUrl(): string | undefined {
+    return process.env.NEXT_PUBLIC_APP_URL || undefined;
   },
   // AI features are prepared but disabled in V1.
   get aiEnabled(): boolean {
